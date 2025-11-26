@@ -1,5 +1,3 @@
-# Technical guide for the CEGE0043 API 
-
 ## 1. system requirement: 
 
 >> ### Browser: 
@@ -84,6 +82,5 @@ the geoJSON.js file creates a geoJSON router has several. Endpoints defined in t
 
 ## 4. sources
 - The code for this api is adapted from https://github.com/ucl-geospatial/cege0043-api-examples.git by Ellul C. [Last acessed on 26/04/2023]
-- A large proportion of the codes for the app are adapted from the example code for CEGE0043 Web Mobile and GIS by Ellul, C. including functions related to location tracking, getting data from server, data processing, map layer displaying and manipulating, d3 graph creation, Map click eventing setting up, and etc.  https://github.com/ucl-geospatial/cege0043-app-examples.git. [last acessed on 26/04/2023]
 - This app has made the dashboard by adapting the bootStrap template 'CoolAdmin' from: https://github.com/puikinsh/CoolAdmin. [last acessed on 26/04/2023]
 
