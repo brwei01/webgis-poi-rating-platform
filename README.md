@@ -1,4 +1,9 @@
-# Technical guide for the CEGE0043 API 
+# A Demonstration of the app
+
+<img width="75%" alt="cb426485-d566-495f-a34f-21d8582e6912" src="https://github.com/user-attachments/assets/7a7f2fd1-a5c6-47ce-9294-d73b533aac6a" />
+
+
+# Technical guide for the API 
 
 ## 1. system requirement: 
 
