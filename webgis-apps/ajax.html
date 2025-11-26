@@ -1,0 +1,35 @@
+<DOCTYPE html>
+<head>
+  <title>AJAX example</title>
+</head>
+<body>
+  <h2>This page uses native Javascript AJAX to load the Centennial room data automatically when the page is loaded. They results are displayed in a DIV</h2>
+  <div id="roomdiv"></div>
+  <br>
+  <br>
+<h2 > You can also type any URL into this box and the results of the AJAX query will be displayed in a second DIV</h2> 
+<br><input id="ajaxURL" type="text" style="width:500px">
+<button id="ajaxButton" onclick="getData()">Click here to load the data</button>
+<div id="ajaxDIV"></div>
+</body>
+
+
+ <!-- use JQuery as it makes AJAX easy -->
+ <!-- JQuery takes time to load so put it after the body of the page has loaded -->
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script> 
+
+<!-- now get the script to run the AJAX requests and process the results -->
+<script src="js/ajaxRequestsResponses.js"></script>
+
+<script>
+// code below runs once the page has loaded 
+// NB this is not in a function so it will run without needed a call to a function
+document.addEventListener('DOMContentLoaded', function() {
+  console.log("listener domcontentloaded");
+  startPage();
+}, false);
+
+</script>
