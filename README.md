@@ -1,10 +1,14 @@
+# Important Note
+The original deployment relied on university-hosted servers (with VPN access) that have since been discontinued.
+As a result, the online WebGIS demo is no longer accessible.
+A local/offline deployment version is under redevelopment and will be released soon.
+
 # A Demonstration of the app
 
 <img width="75%" alt="cb426485-d566-495f-a34f-21d8582e6912" src="https://github.com/user-attachments/assets/7a7f2fd1-a5c6-47ce-9294-d73b533aac6a" />
 
-
 # Technical guide for the API 
-
+Due to termination of the server, addresses under this technical guide is not working at the moment. A local deployment version is in the process of development and will be updated soon
 ## 1. system requirement: 
 
 >> ### Browser: 
