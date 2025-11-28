@@ -1,0 +1,91 @@
+<DOCTYPE html>
+<head>
+  <title>Hello Cesium!</title>
+  <script src="Build/Cesium/Cesium.js"></script>
+  <style>
+      @import url(Build/Cesium/Widgets/widgets.css);
+      html, body, #cesiumContainer {
+          width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
+      }
+           .toolbar-left {
+            display: block;
+            position: absolute;
+            top: 5px;
+            left: 5px;
+        }
+  </style>
+
+
+  
+</head>
+<body>
+  <div id="cesiumContainer"></div>
+</body>  
+  <script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script> 
+
+  <script>
+  "use strict";
+  Cesium.Ion.defaultAccessToken ='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3NmQ2NmVmNy0zZGY4LTQ1ZDAtYmUwOC03MjkzM2JjNzQ2OTQiLCJpZCI6MTU2NjMsInNjb3BlcyI6WyJhc3IiLCJnYyJdLCJpYXQiOjE1Njg1MjQwNTl9.siDvMt3fH91XzE39FU_xqVrx-i6M1wWOBl_2vCrY6Xo';
+
+Cesium.Ion.defaultAccessToken ='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3NmQ2NmVmNy0zZGY4LTQ1ZDAtYmUwOC03MjkzM2JjNzQ2OTQiLCJpZCI6MTU2NjMsInNjb3BlcyI6WyJhc3IiLCJnYyJdLCJpYXQiOjE1Njg1MjQwNTl9.siDvMt3fH91XzE39FU_xqVrx-i6M1wWOBl_2vCrY6Xo';
+
+let imageryProviders = Cesium.createDefaultImageryProviderViewModels();
+let selectedImageryProviderIndex = 7;  // MapBox Street is 5th in the list.
+
+let viewer = new Cesium.Viewer('cesiumContainer', {
+    imageryProviderViewModels: imageryProviders,
+    selectedImageryProviderViewModel: imageryProviders[selectedImageryProviderIndex]
+});
+
+
+// only load the layer when the cesium basemap has been created
+document.addEventListener('DOMContentLoaded', function() {
+   loadVectorLayer();
+}, false);
+
+ 
+ </script>
+
+
+<script>
+"use strict";
+
+function loadVectorLayer(){
+  let layerURL = document.location.origin+"/api/geojson/userAssets/685";
+  
+  $.ajax({
+    url: layerURL,
+    crossDomain: true,
+    success: function(result){
+      let geoJsonData = result[0]; // get the geojson data from the first element of the array
+      console.log(geoJsonData);
+      
+      let geoJSONOptions = {
+        stroke: Cesium.Color.RED,
+        fill: Cesium.Color.RED ,
+        strokeWidth: 3,
+        markerSymbol: '*',
+      };
+      
+      let dataSource = new Cesium.GeoJsonDataSource("Buildings");
+      dataSource.clampToGround = false;
+      dataSource._name = "Buildings";
+      viewer.dataSources.add(dataSource);
+      dataSource.load(geoJsonData, geoJSONOptions).then(function(dataSource){
+        viewer.flyTo(dataSource);
+      });
+    }
+  });
+}
+
+
+
+</script>
+
+  
+
+
+</html>

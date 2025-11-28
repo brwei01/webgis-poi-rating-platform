@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgis/postgis:15-3.4
+    container_name: poi_postgis
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: poi_demo
+    ports:
+      - "5432:5432"
+    volumes:
+      - poi-data:/var/lib/postgresql/data
+      - ./db:/docker-entrypoint-initdb.d  # <- 自动执行 01-init.sql
+
+  backend:
+    build: ./backend
+    container_name: poi_backend
+    restart: always
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_USER: postgres
+      DB_PASS: postgres
+      DB_NAME: poi_demo
+
+volumes:
+  poi-data:
