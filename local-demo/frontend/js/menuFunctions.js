@@ -14,7 +14,6 @@ function showHelp(){
 	}
 	// jump to the help page
 	window.location.href = document.location.origin + "/help.html";
-	
 }
 
 // ======================================================
