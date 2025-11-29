@@ -18,6 +18,14 @@ app.get('/',function (req,res) {
 	res.send("Hello World from the App Server on Node port "+httpServerPort + " (mapped to Apache port 443).<br><br> The date is "+ date);
 });
 
+// adding functionality to allow cross-origin queries
+app.use(function(req,res,next){
+	res.setHeader('Access-Control-Allow-Origin','*');
+	res.setHeader('Access-Control-Allow-Headers','X-Requested-With, Content-Type, Accept');
+	res.setHeader('Access-Control-Allow-Methods','GET,PUT,POST,DELETE');
+	next();
+});
+
 // adding functionality to log the requests
 app.use(function (req, res, next) {
 	let filename = path.basename(req.url);
@@ -26,4 +34,16 @@ app.use(function (req, res, next) {
 	next();
 });
 
+// Mount API routes from backend
+// Express 5.x has built-in body parser
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+const geoJSON = require('../backend/routes/geoJSON');
+app.use('/api/geojson',geoJSON);
+
+const crud = require('../backend/routes/crud');
+app.use('/api',crud);
+
+// Serve static files (must be after API routes)
 app.use(express.static(__dirname));

@@ -4,7 +4,8 @@ let mymap;
 // create a custom popup as a global variable
 let popup = L.popup();
 // get server url, this will be used in all js files
-const serverURL = document.location.origin;
+// const serverURL = document.location.origin;
+const serverURL = "http://localhost:3000"
 
 
 
@@ -200,14 +201,20 @@ function getUserAssets() {
             success: function(response){
               const data = response[0];
               //console.log(data.features);
-              // store each feature in userAssets 
-              data.features.forEach(feature => {
-                // add user_id as one of the properties of that feature
-                feature.properties.user_id = userId;
-              });
-              // to return a promise object that resolves with an array of GeoJSON features.
-              // to fulfill the promise with the data obtained from the server.
-              resolve(data.features);
+              // Check if data and features exist
+              if(data && data.features && Array.isArray(data.features)){
+                // store each feature in userAssets 
+                data.features.forEach(feature => {
+                  // add user_id as one of the properties of that feature
+                  feature.properties.user_id = userId;
+                });
+                // to return a promise object that resolves with an array of GeoJSON features.
+                // to fulfill the promise with the data obtained from the server.
+                resolve(data.features);
+              } else {
+                // Return empty array if no features
+                resolve([]);
+              }
             },
             error: function(){
               console.error('Failed to get the user assets.');

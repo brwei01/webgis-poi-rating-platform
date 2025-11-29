@@ -1,5 +1,7 @@
 "use strict"
 // express is the server that forms part of the nodejs program
+// NOTE: API routes have been integrated into frontend/app.js
+// This file is kept as a backup/reference. Use app.js instead.
 
 let express = require('express');
 let path = require('path');
@@ -33,18 +35,18 @@ app.use(function(req,res,next){
 });
 
 const geoJSON = require('./routes/geoJSON');
-app.use('/geojson',geoJSON);
+app.use('/api/geojson',geoJSON);
 
 // adding CORS 
 app.use(function(req,res,next){
-	res.header("Access-Control-Allow-Origin","*"); // update to match the domain to make the requrest from
+	res.header("Access-Control-Allow-Origin","*"); // update to match the domain to make the request from
 	res.header("Access-Control-Allow-Headers","Origin, X-Requested-With, Content-Type, Accept");
 	next();
 });
 
 
 const crud = require('./routes/crud');
-app.use('/',crud);
+app.use('/api',crud);
 
 
 // app.use(express.static(_dirname)); // used for getting data from static files 

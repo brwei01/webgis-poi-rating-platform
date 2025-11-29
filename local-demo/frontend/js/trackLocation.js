@@ -45,6 +45,14 @@ function errorPosition(error){
 // =============================================
 // to tell the tracker what will be done with the coordinates 
 function showPosition(position){
+	// Remove the previous marker if it exists (keep only the latest position)
+	if (trackLocationLayer.length > 0) {
+		// Remove the last marker from the map
+		mymap.removeLayer(trackLocationLayer[trackLocationLayer.length - 1]);
+		// Remove it from the array
+		trackLocationLayer.pop();
+	}
+	
 	//add the new point into the array by the 'push' command
 	let marker = L.marker([position.coords.latitude, position.coords.longitude])
 	trackLocationLayer.push(marker.addTo(mymap));
