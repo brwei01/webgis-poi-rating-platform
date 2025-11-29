@@ -20,6 +20,9 @@ A Web GIS-based asset management and condition assessment platform that allows u
 - 📍 **Asset Management**: Create, view, and delete asset points
 - 📊 **Condition Assessment**: Perform condition assessments and reports on assets
 - 📱 **Responsive Design**: Supports both desktop and mobile devices with automatic feature adjustment based on screen size
+  - **Desktop/Large Screen (992px-1200px, Bootstrap `lg`)**: Management interface - create POIs (Points of Interest) and view asset information. **View-only mode** for condition assessment (cannot rate POIs). Simulates console panel/management interface behavior.
+  - **Mobile/Small Screen (<768px, Bootstrap `xs`/`sm`)**: Assessment-focused interface - **rate existing POIs** and view results. Asset creation is disabled to focus on field assessment tasks.
+  - **Extra Large Screen (≥1200px)**: View-only mode with markers disabled
 - 📍 **GPS Tracking**: Mobile support for GPS location tracking and nearest asset finding
 - 🎨 **Visual Markers**: Color-coded markers based on asset condition status
 - 📈 **Data Visualization**: Provides charts and statistics
@@ -231,23 +234,43 @@ See `db/schema.sql` and `db/views.sql` for detailed structure
 
 ## 📖 User Guide
 
-### Desktop (Large Screen)
+### Screen Size Behavior
 
-1. **Create Asset**
+The application automatically adjusts functionality based on screen size:
+
+- **Desktop/Large Screen (992px-1200px, Bootstrap `lg` breakpoint)**
+  - ✅ **POI Creation Enabled**: Click anywhere on the map to create new Points of Interest (POIs)
+  - ✅ **Asset Management**: Create, view, update, and delete assets
+  - 👁️ **View-Only Assessment**: Click on POI markers to view asset information and condition history, but **cannot rate/assess POIs**
+  - 🎯 **Use Case**: Simulates console panel/management interface behavior for administrators and managers
+
+- **Mobile/Small Screen (<768px, Bootstrap `xs`/`sm` breakpoint)**
+  - ❌ **POI Creation Disabled**: Cannot create new POIs (map click events disabled)
+  - ✅ **Condition Assessment Enabled**: **Rate existing POIs** and view results
+  - ✅ **GPS Tracking**: Automatic location tracking and nearest asset detection
+  - 🎯 **Use Case**: Field assessment workflow for on-site evaluators
+
+- **Extra Large Screen (≥1200px, Bootstrap `xl`)**
+  - 👁️ **View-Only Mode**: Markers are disabled, read-only interface
+
+### Desktop (Large Screen, 992px-1200px)
+
+**Note**: This is a management interface. You can create POIs but **cannot rate/assess them** on desktop. Rating is only available on mobile devices.
+
+1. **Create POI/Asset**
    - Click anywhere on the map
    - Fill in asset name and installation date
    - Click save
+   - This simulates the management/console panel workflow
 
 2. **View Asset Information**
    - Click on an asset marker on the map
    - View asset details and latest condition
-
-3. **Condition Assessment**
-   - Click on an asset marker
-   - Select condition status
-   - Save assessment
+   - **Note**: This is view-only. To rate/assess POIs, use the mobile interface.
 
 ### Mobile (Small Screen)
+
+**Note**: POI creation is disabled on mobile devices. This interface is designed for field assessment only.
 
 1. **GPS Tracking**
    - System automatically gets current location
@@ -258,6 +281,10 @@ See `db/schema.sql` and `db/views.sql` for detailed structure
    - System automatically displays nearest asset
    - Fill in condition assessment
    - Save report
+
+3. **View Results**
+   - Access assessment results and statistics
+   - View historical condition reports
 
 ### Marker Color Legend
 
