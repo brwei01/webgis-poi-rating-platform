@@ -358,6 +358,7 @@ docker-compose up -d
 
 This will delete all data and reinitialize.
 
+<!--
 ## 📄 License
 
 [Add your license information]
@@ -369,4 +370,5 @@ Issues and Pull Requests are welcome!
 ## 📧 Contact
 
 [Add your contact information]
+-->
 
