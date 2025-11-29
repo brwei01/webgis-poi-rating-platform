@@ -1,7 +1,10 @@
 # Important Note
 The original deployment relied on university-hosted servers (with VPN access) that have since been discontinued.
 As a result, the online WebGIS demo is no longer accessible.
-A local/offline deployment version is under redevelopment and will be released soon.
+A local/offline version can be deployed on Docker now.
+Please refer to the information under /local-demo for details
+
+---
 
 # A Demonstration of the app
 
