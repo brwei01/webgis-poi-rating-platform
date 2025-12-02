@@ -5,7 +5,11 @@ A local/offline version can be deployed on Docker now.
 Please refer to the information under [/local-demo](https://github.com/brwei01/webgis-poi-rating-platform/tree/main/local-demo) for details
 
 **!!!OR test out the demo via this [/link](http://54.89.155.104/bootStrap.html) on line!!!**
-
+You will likely to get 
+`
+[object GeolocationPositionError]
+`
+this is because the api runs on HTTP, which does not support location services because most modern browsers have security restrictions that block the Geolocation API on unencrypted HTTP connections to prevent misuse of location data.
 
 ---
 
