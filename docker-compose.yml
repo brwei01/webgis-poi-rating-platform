@@ -8,7 +8,7 @@ services:
       POSTGRES_PASSWORD: mypassword   # pwd
       POSTGRES_DB: ucfscde            # name of database
     ports:
-      - "5432:5432"
+      - "5433:5432"                   # map host port 5433 to container port 5432 (宿主机上已经安装了postgresql默认占用5432，发生冲突所以改成5433)
     volumes:
       - ./db:/docker-entrypoint-initdb.d      # automatically execute .sql/.sh initialization script
       - pgdata:/var/lib/postgresql/data       # data persistence (data will reamin after docker container is removed) remove by `docker volume rm pgdata`
