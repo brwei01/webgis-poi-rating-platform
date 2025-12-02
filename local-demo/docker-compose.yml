@@ -1,39 +1,81 @@
 services:
+  # database service：PostGIS
   db:
     image: postgis/postgis:15-3.4
     container_name: cege0043_postgis
     environment:
-      POSTGRES_USER: user101          # ← username
-      POSTGRES_PASSWORD: mypassword   # ← set password
-      POSTGRES_DB: ucfscde            # ← name of database
+      POSTGRES_USER: user101          # usr
+      POSTGRES_PASSWORD: mypassword   # pwd
+      POSTGRES_DB: ucfscde            # name of database
     ports:
       - "5432:5432"
     volumes:
-      - ./db:/docker-entrypoint-initdb.d  # execute automativly sql files
-      - pgdata:/var/lib/postgresql/data
-    networks:
-      - postgres-network
+      - ./db:/docker-entrypoint-initdb.d      # automatically execute .sql/.sh initialization script
+      - pgdata:/var/lib/postgresql/data       # data persistence (data will reamin after docker container is removed) remove by `docker volume rm pgdata`
 
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    container_name: cege0043_pgadmin
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
-      PGADMIN_CONFIG_SERVER_MODE: 'False'
-    ports:
-      - "5050:80" # 宿主机端口:容器内端口
-    volumes:
-      - pgadmin-data:/var/lib/pgadmin
-    depends_on:
-      - db
     networks:
-      - postgres-network
+      - webgis-network
+
+  # backend services（Express + node.js）
+  backend:
+    build:
+      context: ./backend      
+      dockerfile: Dockerfile
+    container_name: webgis_backend
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: user101
+      DB_PASSWORD: mypassword
+      DB_NAME: ucfscde
+      NODE_ENV: production
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db                   
+    networks:
+      - webgis-network
+    restart: unless-stopped
+
+  # frontend services（Nginx static files）
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile  # if name same as "Dockerfile", this line can be omitted
+    container_name: webgis_frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend               
+    networks:
+      - webgis-network
+    restart: unless-stopped
+
+  # optional：pgAdmin（数据库管理界面）
+  # pgadmin:
+  #   image: dpage/pgadmin4:latest
+  #   container_name: cege0043_pgadmin
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: admin@admin.com
+  #     PGADMIN_DEFAULT_PASSWORD: admin
+  #     PGADMIN_CONFIG_SERVER_MODE: 'False'
+  #   ports:
+  #     - "5050:80"
+  #   volumes:
+  #     - pgadmin-data:/var/lib/pgadmin
+  #   depends_on:
+  #     - db
+  #   networks:
+  #     - webgis-network
+
+
 
 volumes:
   pgdata:
-  pgadmin-data:
+    # driver: local （this is default, default local driver)
+  # pgadmin-data:
+  
 
 networks:
-  postgres-network:
+  webgis-network:
     driver: bridge

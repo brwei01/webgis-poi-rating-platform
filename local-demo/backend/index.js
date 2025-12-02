@@ -1,35 +1,40 @@
+// ===========================
+// Unified Backend Server
+// ===========================
+
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 const { Pool } = require("pg");
 
 const app = express();
+
+// ===== Global Middleware =====
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Database connection pool
-// const pool = new Pool({
-//   user: "postgres",
-//   host: "db",   // docker-compose 里 PostGIS 容器的名字
-//   database: "poi_demo",
-//   password: "postgres",
-//   port: 5432
-// });
+// Request logging (optional but useful)
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  next();
+});
 
+// ===== PostgreSQL Connection Pool =====
 const pool = new Pool({
-	user: process.env.DB_USER || "postgres",
-	host: process.env.DB_HOST || "localhost",
-	database: process.env.DB_NAME || "poi_demo",
-	password: process.env.DB_PASS || "postgres",
-	port: 5432
-  });
-  
+  user: process.env.DB_USER || "postgres",
+  host: process.env.DB_HOST || "localhost",
+  database: process.env.DB_NAME || "poi_demo",
+  password: process.env.DB_PASSWORD || "postgres",
+  port: process.env.DB_PORT || 5432
+});
 
-// Simple test API
+// Health check API
 app.get("/", (req, res) => {
   res.send("Backend API is running.");
 });
 
-// GET /pois - fetch all points
+// ===== /pois API (PostGIS Example) =====
 app.get("/pois", async (req, res) => {
   try {
     const result = await pool.query(`
@@ -44,12 +49,11 @@ app.get("/pois", async (req, res) => {
 
     res.json(result.rows);
   } catch (err) {
-    console.error(err);
+    console.error("Database query error:", err);
     res.status(500).json({ error: "Database query failed" });
   }
 });
 
-const PORT = 5000;
-app.listen(PORT, () => {
-  console.log(`API running on port ${PORT}`);
-});
+// ===== API Routes from Old Frontend/app.js =====
+const geoJSON = require("./routes/geoJSON");
+const crud = re
