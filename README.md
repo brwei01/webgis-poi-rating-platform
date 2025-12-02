@@ -4,6 +4,9 @@ As a result, the online WebGIS demo is no longer accessible.
 A local/offline version can be deployed on Docker now.
 Please refer to the information under [/local-demo](https://github.com/brwei01/webgis-poi-rating-platform/tree/main/local-demo) for details
 
+or test out the demo via this [/link](demohttp://54.89.155.104/bootStrap.html) on line!
+
+
 ---
 
 # A Demonstration of the app
