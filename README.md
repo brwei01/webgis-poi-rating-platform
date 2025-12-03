@@ -12,10 +12,6 @@ You will likely to get
 this is because the api runs on HTTP, which does not support location services because most modern browsers have security restrictions that block the Geolocation API on unencrypted HTTP connections to prevent misuse of location data.
 
 ---
-# Important Note
-The original deployment relied on university-hosted servers (with VPN access) that have since been discontinued.
-As a result, the online WebGIS demo is no longer accessible.
-A local/offline deployment version is under redevelopment and will be released soon.
 
 # A Demonstration of the app
 
