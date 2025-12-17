@@ -1,7 +1,7 @@
 services:
   # database service：PostGIS
   db:
-    image: postgis/postgis:15-3.4
+    image: postgis/postgis:17-3.5
     container_name: cege0043_postgis
     environment:
       POSTGRES_USER: user101          # usr
@@ -26,7 +26,7 @@ services:
       DB_HOST: db
       DB_PORT: 5432
       DB_USER: user101
-      DB_PASSWORD: mypassword
+      DB_PASSWORD: password
       DB_NAME: ucfscde
       NODE_ENV: production
     ports:
@@ -74,8 +74,6 @@ volumes:
   pgdata:
     # driver: local （this is default, default local driver)
   # pgadmin-data:
-  
-
 networks:
   webgis-network:
     driver: bridge

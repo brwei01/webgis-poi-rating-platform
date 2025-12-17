@@ -60,3 +60,8 @@ const crud = require("./routes/crud");
 
 app.use("/geojson", geoJSON);
 app.use("/", crud);
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server is running on port ${PORT}`);
+});
