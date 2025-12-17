@@ -22,10 +22,10 @@ app.use((req, res, next) => {
 
 // ===== PostgreSQL Connection Pool =====
 const pool = new Pool({
-  user: process.env.DB_USER || "postgres",
+  user: process.env.DB_USER || "user101",
   host: process.env.DB_HOST || "localhost",
-  database: process.env.DB_NAME || "poi_demo",
-  password: process.env.DB_PASSWORD || "postgres",
+  database: process.env.DB_NAME || "ucfscde",
+  password: process.env.DB_PASSWORD || "password",
   port: process.env.DB_PORT || 5432
 });
 

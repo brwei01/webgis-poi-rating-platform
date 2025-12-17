@@ -1,5 +1,7 @@
 "use strict"
 
+const pool = require('../index').pool; // PostgreSQL 连接池
+
 const express = require('express');
 const pg = require('pg');
 const crud = require('express').Router();
@@ -27,16 +29,6 @@ try {
 } catch (err) {
 	console.log("Config file not found, using Docker/local configuration");
 }
-
-// Use Docker/local configuration (fallback or default)
-// Match the configuration in docker-compose.yml
-const pool = new pg.Pool({
-    user: process.env.DB_USER,
-    host: process.env.DB_HOST,      // ← 从环境变量读取
-    database: process.env.DB_NAME,
-    password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT
-  }); // <-- 本地docker部署版
 
 const bodyParser = require('body-parser'); 
 const e = require('express');

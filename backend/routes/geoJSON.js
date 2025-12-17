@@ -1,5 +1,8 @@
 "use strict"
 
+// 新的写法,不能混用: import { pool } from '../index'; // PostgreSQL 连接池
+const pool = require('../index').pool
+
 const express = require('express');
 const pg = require('pg');
 const geoJSON = require('express').Router();
@@ -14,7 +17,7 @@ console.log(username);
 // locate the database login details
 let config = {};
 try {
-	const configtext = "" + fs.readFileSync("/home/" + username + "/certs/postGISConnection.js");
+	const configtext = "" + readFileSync("/home/" + username + "/certs/postGISConnection.js");
 	// convert the configuration file into the correct format
 	// i.e. a name/value pair array
 	const configarray = configtext.split(",");
@@ -27,19 +30,8 @@ try {
 } catch (err) {
 	console.log("Config file not found, using Docker/local configuration");
 }
-
-// Use Docker/local configuration (fallback or default)
-// Match the configuration in docker-compose.yml
-const pool = new pg.Pool({
-    user: process.env.DB_USER,
-    host: process.env.DB_HOST,      // ← 从环境变量读取
-    database: process.env.DB_NAME,
-    password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT
-  }); // <- docker 部署数据库
   
-const bodyParser = require('body-parser'); 
-const e = require('express');
+const bodyParser = require('body-parser');
 geoJSON.use(bodyParser.urlencoded({ extended: true }));
 
 geoJSON.route('/testGeoJSON').get(function(req,res){
