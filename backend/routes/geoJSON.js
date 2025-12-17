@@ -31,11 +31,11 @@ try {
 // Use Docker/local configuration (fallback or default)
 // Match the configuration in docker-compose.yml
 const pool = new pg.Pool({
-    user: "user101", // Match docker-compose.yml POSTGRES_USER
-    host: "localhost", // Use localhost when running Node.js outside Docker
-    database: "ucfscde",
-    password: "mypassword", // Match docker-compose.yml POSTGRES_PASSWORD
-    port: 5432
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,      // ← 从环境变量读取
+    database: process.env.DB_NAME,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT
   }); // <- docker 部署数据库
   
 const bodyParser = require('body-parser'); 
