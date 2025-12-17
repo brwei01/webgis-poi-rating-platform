@@ -56,4 +56,7 @@ app.get("/pois", async (req, res) => {
 
 // ===== API Routes from Old Frontend/app.js =====
 const geoJSON = require("./routes/geoJSON");
-const crud = re
+const crud = require("./routes/crud");
+
+app.use("/geojson", geoJSON);
+app.use("/", crud);
