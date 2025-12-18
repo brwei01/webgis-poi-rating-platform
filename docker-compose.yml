@@ -34,7 +34,7 @@ services:
       - "3000:3000"
     volumes:
       - ${VOLUME_MOUNT:-./backend}:/app        # mount volume if specified in env file
-      - app/node_modules                     # prevent overwriting node_modules
+      - /app/node_modules                     # prevent overwriting node_modules
     command: node index.js  # default command, can be override by override file
     depends_on:
       - db                   
