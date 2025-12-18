@@ -5,6 +5,7 @@ A local/offline version can be deployed on Docker now.
 Please refer to the information under [/local-demo](https://github.com/brwei01/webgis-poi-rating-platform/tree/main/local-demo) for details
 
 **!!!OR test out the demo via this [/link](http://54.145.60.127/bootStrap.html) on line!!!**
+** now Its 100% ready to play with **
 
 You will likely to get 
 `
