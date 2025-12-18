@@ -49,8 +49,8 @@ app.get("/pois", async (req, res) => {
 const geoJSON = require("./routes/geoJSON");
 const crud = require("./routes/crud");
 
-app.use("/geojson", geoJSON);
-app.use("/", crud);
+app.use("/api/geojson", geoJSON);
+app.use("/api", crud);
 
 // for local: localhost:3000/api/geojson
 // app.use("/api/geojson", geoJSON);
