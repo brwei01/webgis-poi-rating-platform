@@ -49,8 +49,12 @@ app.get("/pois", async (req, res) => {
 const geoJSON = require("./routes/geoJSON");
 const crud = require("./routes/crud");
 
-app.use("/api/geojson", geoJSON);
-app.use("/api", crud);
+app.use("/geojson", geoJSON);
+app.use("/", crud);
+
+// for local: localhost:3000/api/geojson
+// app.use("/api/geojson", geoJSON);
+// app.use("/api", crud);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => {
