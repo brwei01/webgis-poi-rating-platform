@@ -4,10 +4,8 @@ let mymap;
 // create a custom popup as a global variable
 let popup = L.popup();
 // get server url, this will be used in all js files
-// const serverURL = document.location.origin;
-const serverURL = "http://localhost:3000"
-
-
+const serverURL = document.location.origin;
+// const serverURL = "http://localhost:3000"
 
 
 // ==========================================================================
