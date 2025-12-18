@@ -12,7 +12,6 @@ services:
     volumes:
       - ./db:/docker-entrypoint-initdb.d      # automatically execute .sql/.sh initialization script
       - pgdata:/var/lib/postgresql/data       # data persistence (data will reamin after docker container is removed) remove by `docker volume rm pgdata`
-
     networks:
       - webgis-network
 
@@ -21,16 +20,22 @@ services:
     build:
       context: ./backend      
       dockerfile: Dockerfile
+      args: 
+        NODE_ENV: production    
     container_name: webgis_backend
     environment:
+      NODE_ENV: production
       DB_HOST: db
       DB_PORT: 5432
       DB_USER: user101
       DB_PASSWORD: password
       DB_NAME: ucfscde
-      NODE_ENV: production
     ports:
       - "3000:3000"
+    volumes:
+      - ${VOLUME_MOUNT:-./backend}:/app        # mount volume if specified in env file
+      - app/node_modules                     # prevent overwriting node_modules
+    command: node index.js  # default command, can be override by override file
     depends_on:
       - db                   
     networks:
@@ -52,28 +57,28 @@ services:
     restart: unless-stopped
 
   # optional：pgAdmin（数据库管理界面）
-  # pgadmin:
-  #   image: dpage/pgadmin4:latest
-  #   container_name: cege0043_pgadmin
-  #   environment:
-  #     PGADMIN_DEFAULT_EMAIL: admin@admin.com
-  #     PGADMIN_DEFAULT_PASSWORD: admin
-  #     PGADMIN_CONFIG_SERVER_MODE: 'False'
-  #   ports:
-  #     - "5050:80"
-  #   volumes:
-  #     - pgadmin-data:/var/lib/pgadmin
-  #   depends_on:
-  #     - db
-  #   networks:
-  #     - webgis-network
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: cege0043_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      - db
+    networks:
+      - webgis-network
 
 
 
 volumes:
   pgdata:
     # driver: local （this is default, default local driver)
-  # pgadmin-data:
+  pgadmin-data:
 networks:
   webgis-network:
     driver: bridge

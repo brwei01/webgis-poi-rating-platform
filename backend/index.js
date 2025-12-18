@@ -5,7 +5,7 @@
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
-const { Pool } = require("pg");
+const pool = require("./db_pool"); // PostgreSQL 连接池
 
 const app = express();
 
@@ -18,15 +18,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
   next();
-});
-
-// ===== PostgreSQL Connection Pool =====
-const pool = new Pool({
-  user: process.env.DB_USER || "user101",
-  host: process.env.DB_HOST || "localhost",
-  database: process.env.DB_NAME || "ucfscde",
-  password: process.env.DB_PASSWORD || "password",
-  port: process.env.DB_PORT || 5432
 });
 
 // Health check API
@@ -59,9 +50,10 @@ const geoJSON = require("./routes/geoJSON");
 const crud = require("./routes/crud");
 
 app.use("/api/geojson", geoJSON);
-app.use("/api/", crud);
+app.use("/api", crud);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on port ${PORT}`);
 });
+

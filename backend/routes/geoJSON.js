@@ -1,7 +1,6 @@
 "use strict"
 
-// 新的写法,不能混用: import { pool } from '../index'; // PostgreSQL 连接池
-const pool = require('../index').pool
+const pool = require('../db_pool'); // PostgreSQL 连接池
 
 const express = require('express');
 const pg = require('pg');
@@ -17,7 +16,7 @@ console.log(username);
 // locate the database login details
 let config = {};
 try {
-	const configtext = "" + readFileSync("/home/" + username + "/certs/postGISConnection.js");
+	const configtext = "" + fs.readFileSync("/home/" + username + "/certs/postGISConnection.js");
 	// convert the configuration file into the correct format
 	// i.e. a name/value pair array
 	const configarray = configtext.split(",");

@@ -1,6 +1,6 @@
 "use strict"
 
-const pool = require('../index').pool; // PostgreSQL 连接池
+const pool = require('../db_pool'); // PostgreSQL 连接池
 
 const express = require('express');
 const pg = require('pg');

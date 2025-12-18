@@ -1,0 +1,11 @@
+services:
+  backend:
+    build:
+      args:
+        NODE_ENV: development
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    command: npx nodemon index.js

@@ -1,0 +1,5 @@
+.env
+.env.local
+.envs.txt
+docker-compose.override.yml  # ← 不提交到 Git
+node_modules
