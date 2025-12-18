@@ -4,7 +4,8 @@ As a result, the online WebGIS demo is no longer accessible.
 A local/offline version can be deployed on Docker now.
 Please refer to the information under [/local-demo](https://github.com/brwei01/webgis-poi-rating-platform/tree/main/local-demo) for details
 
-**!!!OR test out the demo via this [/link](http://54.145.60.127/bootStrap.html) on line!!!**
+**!!!OR test out the demo via this [/link](http://54.145.60.127/index.html) on line!!!**
+**This is a new routing feature [/link](http://54.145.60.127/LocationalServices.html)**
 ** now Its 100% ready to play with **
 
 You will likely to get 
@@ -18,6 +19,7 @@ this is because the api runs on HTTP, which does not support location services b
 # A Demonstration of the app
 
 <img width="75%" alt="cb426485-d566-495f-a34f-21d8582e6912" src="https://github.com/user-attachments/assets/7a7f2fd1-a5c6-47ce-9294-d73b533aac6a" />
+<img width="75%" alt="cb426485-d566-495f-a34f-21d8582e6912" src="https://github.com/user-attachments/assets/11add22e-f3d8-41d0-9cf3-96997cdbc02f" />
 # Web GIS Asset Condition Assessment Platform
 
 A Web GIS-based asset management and condition assessment platform that allows users to create, view, and manage assets on a map, and perform condition assessments.
