@@ -5,7 +5,7 @@ let mymap;
 let popup = L.popup();
 // get server url, this will be used in all js files
 const serverURL = document.location.origin;
-// const serverURL = "http://localhost:3000"
+// const serverURL = "http://localhost:3000"; // 本地测试只能先用这个地址
 
 
 // ==========================================================================
@@ -124,10 +124,24 @@ function setMapClickEvent(){
     
 }
 
+// ======================================================
+// set map click event for routing page
+function setMapClickEventRouting(){
+    if (featureGroup.getLayers().length > 0) {
+      featureGroup.clearLayers();
+      mymap.removeLayer(featureGroup);
+      console.log("after removal: " + featureGroup.getLayers().length);
+    }
+    mymap.off('click', onMapClick);
+    trackLocation();
+    setUpPointClick('routing');
+}
+
+
 // =====================================================================================
 // the function to create markers on map from database
 // and pop up condition information or condition assessment according to different window sizes
-function setUpPointClick() {
+function setUpPointClick(popupType = 'default') {
 
     // create a geoJSON feature by making an AJAX call to load the asset points on the map
     getUserAssets().then((geojsonFeatures) => {
@@ -146,27 +160,33 @@ function setUpPointClick() {
 
             // to get the asset geometry, for marker creation:
             let coords = feature.geometry.coordinates;
+
+            // create the marker according to the geometry of the asset from request.
+            let asset = L.marker([coords[1], coords[0]], {
+                assetId: assetId,
+                assetName: assetName,
+                condition_description: previousConditionDescription,
+                coords: coords
+            })
             
             // define the pop up html depending on window size
             let popUpHTML;
-            if (windowSmall) {
-                popUpHTML = getPopupHTML(assetName, installationDate, previousConditionDescription, userId, assetId);
-            } else if(!windowSmall) {
-                popUpHTML = getPopupCondition(assetName, installationDate, previousConditionDescription); 
-            } 
-            
-            // create the marker according to the geometry of the asset from request.
-            let asset = L.marker([coords[1], coords[0]], {
-                condition_description: previousConditionDescription,
-            }).bindPopup(popUpHTML);
-            
+            if (popupType === 'default') {
+                if (windowSmall) {
+                  popUpHTML = getPopupHTML(assetName, installationDate, previousConditionDescription, userId, assetId);
+              } else if(!windowSmall) {
+                  popUpHTML = getPopupCondition(assetName, installationDate, previousConditionDescription); 
+              } 
+            } else if (popupType === 'routing') {
+                popUpHTML = getPopupHTMLRouting(assetName, installationDate, userId, assetId, coords);
+            }
+ 
+            asset.bindPopup(popUpHTML);
             // add the marker to the featureGroup
-            featureGroup.addLayer(asset);
-
-            // set Marker colors dependint on their condition descriptions
-            setMarkerColours(featureGroup);
+            featureGroup.addLayer(asset);    
         });
-
+        // set Marker colors dependint on their condition descriptions
+        setMarkerColours(featureGroup);
         // add the point group to the map
         featureGroup.addTo(mymap);   
         // zoom the map to the bounding box of all points
@@ -185,6 +205,7 @@ function getUserAssets() {
     let userId;
     // create promise object to store the asset data get from api.
     const promise = new Promise((resolve, reject) => {
+      console.log("serverURL: " + serverURL);
       // get the userId
       $.ajax({
         type: 'GET',
@@ -350,6 +371,40 @@ function getPopupHTML(assetName, installationDate, previousConditionDescription,
     return myvar
 }
 
+// ====================================================================
+// 路由页面的弹窗表单
+function getPopupHTMLRouting(assetName, installationDate, userId, assetId, coords) {
+    let lat = coords[1];
+    let lng = coords[0];
+    return `
+<!DOCTYPE html>
+<head>
+    <title>Routing Form</title>
+</head>
+<body>
+    <h1 style="font-size: medium;">Route Planning</h1>
+    
+    <div id="assetName">Asset: ${assetName}</div>
+    <div id="installationDate">Date: ${installationDate}</div>
+    <div id="userID" style="display: none;">${userId}</div>
+    <div id="assetID" style="display: none;">${assetId}</div>
+    
+    <p>Select destination:</p>
+    <button onclick="setAsDestination(${assetId}, ${lat}, ${lng},'${assetName}')">Set as Destination</button>
+
+    <p>Or Add To Routes:</p>
+    <button onclick="addToRoute(${assetId}, ${lat}, ${lng},'${assetName}')">Add to Route</button>
+
+    <p>After setting destination or adding waypoints, click below to calculate route:</p>
+    <button onclick="calculateRoute()">Calculate Route</button>
+    
+    <br /><br />
+
+    <div id="routeResult"></div>
+</body>
+    `;
+}
+
 
 // ====================================================================
 // the function to create asset creation form
@@ -389,8 +444,6 @@ let mylet = `
         <div id="deleteAssetResponse">The result of the deletion goes here</div>
 
     </div>
-
-
 </body>
 `;
 

@@ -1,3 +1,7 @@
+/**
+ * THIS IS THE PAGE TO TEST AJAX REQUESTS
+ */
+
 "use strict"
 
 const pool = require('../db_pool'); // PostgreSQL 连接池

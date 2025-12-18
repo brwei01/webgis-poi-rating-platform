@@ -3,25 +3,40 @@
 
 <head>
 
-    <!-- code for Leaflet -->
+    <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
      integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
      crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
      integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
      crossorigin=""></script>
+    
+     <!-- Leaflet Routing Machine -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css"/>
+    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
 
-     <script
+    <!-- Awesome Markers -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.awesome-markers@2.0.2/dist/leaflet.awesome-markers.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet.awesome-markers@2.0.2/dist/leaflet.awesome-markers.min.js"></script>
+    
+    <!-- jQuery library -->
+    <script
     src="https://code.jquery.com/jquery-3.4.1.min.js"
     integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
     crossorigin="anonymous"></script>
+    
+    <!-- the following links incorporate the CSS required for custom icon creation -->
+    <link rel="stylesheet" href="css/ionicons.min.css">
+    <link rel="stylesheet" href="css/leaflet.awesome-markers.css">
+    <script src="js/leaflet.awesome-markers.js"></script>
     
     <title>Test HTML Location Functionality</title>
     <script src = 'js/basicMapLeaflet.js'></script>
     <script src = 'js/getLocation.js'></script>
     <script src="js/getDistance.js"></script>
     <script src = "js/trackLocation.js"></script>
-    
+    <script src = "js/getRoute.js"></script>
+
 </head>
 
 
@@ -55,15 +70,18 @@
     <!-- the following script will load the map and set the default view and zoom, as well as loading the 
     basemap tiles -->
     <script>
-        
+    "use strict";
     //window.onload = loadLeafletMap
     document.addEventListener('DOMContentLoaded', function() {
         loadMap();
     }, false);
         
     function loadMap() {
+        if (mymap != undefined){
+            mymap.remove();
+        }   
         loadLeafletMap();
-        //getEarthquakeData(); 
+        setMapClickEventRouting();
     }//end of loading map
 
     </script>

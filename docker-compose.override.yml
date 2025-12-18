@@ -9,3 +9,7 @@ services:
       - ./backend:/app
       - /app/node_modules
     command: npx nodemon index.js
+
+  frontend:
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
