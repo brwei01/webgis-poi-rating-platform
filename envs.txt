@@ -1,0 +1,44 @@
+
+# ======== 开发环境 ====================
+# docker-compose.yml
+backend:
+  build:
+    context: ./backend
+  volumes:
+    - ./backend:/app           # ← 挂载
+    - /app/node_modules        # ← 排除 node_modules
+  command: npx nodemon index.js  # ← nodemon
+  environment:
+    NODE_ENV: development
+
+# backend/Dockerfile
+FROM node:20-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm install  # 包含 devDependencies（有 nodemon）
+COPY . .
+EXPOSE 3000
+CMD ["npx", "nodemon", "index.js"]
+
+
+# ======== 生产环境 ====================
+
+# docker-compose.prod.yml
+backend:
+  build:
+    context: ./backend
+  # 不挂载 volumes
+  command: node index.js  # ← 普通 node
+  environment:
+    NODE_ENV: production
+
+# backend/Dockerfile
+FROM node:20-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production  # 不安装 nodemon
+COPY . .
+EXPOSE 3000
+CMD ["node", "index.js"]
+
+

@@ -1,0 +1,9 @@
+View database in docker:
+docker exec -it cege0043_postgis psql -U postgres -d ucfscde
+\dn <-- show tables
+\dt cege0043.* <-- show schema contents
+\dx <-- show extension 
+
+SELECT * FROM cege0043.asset_information; <-- check table contents
+
+
