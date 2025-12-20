@@ -371,36 +371,190 @@ function getPopupHTML(assetName, installationDate, previousConditionDescription,
 }
 
 // ====================================================================
-// 路由页面的弹窗表单
+// routing页面的弹窗表单
+// function getPopupHTMLRouting(assetName, installationDate, userId, assetId, coords) {
+//     let lat = coords[1];
+//     let lng = coords[0];
+//     return `
+// <!DOCTYPE html>
+// <head>
+//     <title>Routing Form</title>
+// </head>
+// <body>
+//     <h1 style="font-size: medium;">Route Planning</h1>
+    
+//     <div id="assetName">Asset: ${assetName}</div>
+//     <div id="installationDate">Date: ${installationDate}</div>
+//     <div id="userID" style="display: none;">${userId}</div>
+//     <div id="assetID" style="display: none;">${assetId}</div>
+    
+//     <p>Select destination:</p>
+//     <button onclick="setAsDestination(${assetId}, ${lat}, ${lng},'${assetName}')">Set as Destination</button>
+
+//     <p>Or Add To Routes:</p>
+//     <button onclick="addToRoute(${assetId}, ${lat}, ${lng},'${assetName}')">Add to Route</button>
+
+//     <p>After setting destination or adding waypoints, click below to calculate route:</p>
+//     <button onclick="calculateRoute()">Calculate Route</button>
+    
+//     <br /><br />
+
+//     <div id="routeResult"></div>
+// </body>
+//     `;
+// }
+
 function getPopupHTMLRouting(assetName, installationDate, userId, assetId, coords) {
     let lat = coords[1];
     let lng = coords[0];
+    
+    // ✅ 构建当前途经点列表
+    let waypointsHTML = '';
+    if (routeWaypoints.length > 0) {
+        waypointsHTML = `
+            <div style="background: #e3f2fd; padding: 8px; border-radius: 4px; margin-bottom: 10px;">
+                <strong style="color: #1976d2;">🚩 Current Waypoints:</strong>
+                <ol style="margin: 5px 0; padding-left: 20px; font-size: 12px;">
+                    ${routeWaypoints.map((wp, idx) => `
+                        <li>
+                            ${wp.name} 
+                            <button onclick="removeWaypoint(${idx})" 
+                                    style="background: #f44336; color: white; border: none; 
+                                           padding: 2px 6px; border-radius: 3px; cursor: pointer; 
+                                           font-size: 10px; margin-left: 5px;">
+                                ✕
+                            </button>
+                        </li>
+                    `).join('')}
+                </ol>
+            </div>
+        `;
+    }
+    
+    // ✅ 构建目的地信息
+    let destinationHTML = '';
+    if (routeDestination) {
+        destinationHTML = `
+            <div style="background: #ffebee; padding: 8px; border-radius: 4px; margin-bottom: 10px;">
+                <strong style="color: #c62828;">⭐ Destination:</strong>
+                <div style="font-size: 12px; margin-top: 5px;">
+                    ${routeDestination.name}
+                    <button onclick="clearDestination()" 
+                            style="background: #f44336; color: white; border: none; 
+                                   padding: 2px 6px; border-radius: 3px; cursor: pointer; 
+                                   font-size: 10px; margin-left: 5px;">
+                        ✕
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+    
+    // ✅ 检查当前资产是否已添加
+    let isInWaypoints = routeWaypoints.some(wp => wp.id === assetId);
+    let isDestination = routeDestination && routeDestination.id === assetId;
+    
     return `
-<!DOCTYPE html>
-<head>
-    <title>Routing Form</title>
-</head>
-<body>
-    <h1 style="font-size: medium;">Route Planning</h1>
+<div class="route-popup-container">
+    <style>
+        /* ✅ 所有样式都限定在 .route-popup-container 内部 */
+        .route-popup-container {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 10px;
+            min-width: 280px;
+            max-width: 320px;
+        }
+        .route-popup-container h1 {
+            font-size: 16px;
+            margin: 0 0 10px 0;
+            color: #333;
+            border-bottom: 2px solid #2196F3;
+            padding-bottom: 5px;
+        }
+        .route-popup-container .info-box {
+            background: #f5f5f5;
+            padding: 8px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+        .route-popup-container .info-box div {
+            margin: 3px 0;
+        }
+        .route-popup-container .btn {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: opacity 0.3s;
+        }
+        .route-popup-container .btn:hover:not(:disabled) {
+            opacity: 0.8;
+        }
+        .route-popup-container .btn:disabled {
+            background: #ccc !important;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        .route-popup-container .btn-primary {
+            background: #2196F3;
+            color: white;
+        }
+        .route-popup-container .btn-success {
+            background: #4CAF50;
+            color: white;
+        }
+        .route-popup-container .btn-warning {
+            background: #FF9800;
+            color: white;
+        }
+        .route-popup-container .section-title {
+            font-size: 13px;
+            color: #666;
+            margin: 10px 0 5px 0;
+        }
+    </style>
     
-    <div id="assetName">Asset: ${assetName}</div>
-    <div id="installationDate">Date: ${installationDate}</div>
-    <div id="userID" style="display: none;">${userId}</div>
-    <div id="assetID" style="display: none;">${assetId}</div>
+    <h1>🗺️ Route Planning</h1>
     
-    <p>Select destination:</p>
-    <button onclick="setAsDestination(${assetId}, ${lat}, ${lng},'${assetName}')">Set as Destination</button>
-
-    <p>Or Add To Routes:</p>
-    <button onclick="addToRoute(${assetId}, ${lat}, ${lng},'${assetName}')">Add to Route</button>
-
-    <p>After setting destination or adding waypoints, click below to calculate route:</p>
-    <button onclick="calculateRoute()">Calculate Route</button>
+    <!-- Asset Info -->
+    <div class="info-box">
+        <div><strong>Asset:</strong> ${assetName}</div>
+        <div><strong>Date:</strong> ${installationDate}</div>
+        <div style="display: none;" id="userID">${userId}</div>
+        <div style="display: none;" id="assetID">${assetId}</div>
+    </div>
     
-    <br /><br />
+    <!-- Current Route Info -->
+    ${waypointsHTML}
+    ${destinationHTML}
+    
+    <!-- Action Buttons -->
+    <div class="section-title">📍 Add this asset to route:</div>
+    
+    <button class="btn btn-primary" 
+            onclick="setAsDestination(${assetId}, ${lat}, ${lng},'${assetName}')"
+            ${isDestination ? 'disabled' : ''}>
+        ${isDestination ? '✓ Already Set as Destination' : '⭐ Set as Destination'}
+    </button>
 
-    <div id="routeResult"></div>
-</body>
+    <button class="btn btn-success" 
+            onclick="addToRoute(${assetId}, ${lat}, ${lng},'${assetName}')"
+            ${isInWaypoints || isDestination ? 'disabled' : ''}>
+        ${isInWaypoints ? '✓ Already in Waypoints' : '🚩 Add to Waypoints'}
+    </button>
+    
+    ${(routeWaypoints.length > 0 || routeDestination) ? `
+        <button class="btn btn-warning" onclick="calculateRoute()">
+            🧭 Calculate Route
+        </button>
+    ` : ''}
+    
+    <div id="routeResult" style="margin-top: 10px; font-size: 12px;"></div>
+</div>
     `;
 }
 
