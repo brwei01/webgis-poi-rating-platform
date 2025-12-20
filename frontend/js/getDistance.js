@@ -13,10 +13,10 @@ function getDistanceFromPoint(position){
 	let lng = -0.13818
 	// return the distance in kilometers
 	let distance = calculateDistance(position.coords.latitude, position.coords.longitude, lat,lng, 'K');
-	document.getElementById('showDistance').innerHTML='Distance:' + distance;
+	document.getElementById("showDistance").innerHTML='Distance:' + distance;
 }
 
-// code adapted from https://www.htmlgoodies.com/beyond/javascript/calculate-the-distance-between-two-points-inyour-web-apps.html
+// code adapted from https://www.htmlgoodies.com/beyond/javascript/calculate-the-distance-between-two-points-in-your-web-apps.html
 
 function calculateDistance(lat1, lon1, lat2, lon2, unit){
 	let radlat1 = Math.PI * lat1/180;

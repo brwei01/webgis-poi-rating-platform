@@ -44,7 +44,7 @@ function addToRoute(assetId, lat, lng, name){
     featureGroup.eachLayer(function(layer) {
         if (layer.options.asset_id === assetId) {
             layer.setIcon(L.AwesomeMarkers.icon({
-                icon: 'circle',
+                icon: 'flag',
                 markerColor: 'blue'
             }));
         }
@@ -78,9 +78,11 @@ function calculateRoute(){
         waypoints: waypoints,
         routeWhileDragging: false,
         showAlternatives: true,
+        show: true, // show the itinerary pane,
+        collapsible: true, 
         altLineOptions: {
             styles: [
-                {color: 'gray', opacity: 0.5, weight: 4},
+                {color: 'gray', opacity: 0.5, weight: 4, dashArray: '10, 10'},
             ]
         },
         lineOptions: {
@@ -89,8 +91,8 @@ function calculateRoute(){
         createMarker: function(){return null;},
         router: L.Routing.osrmv1({
             serviceUrl: 'https://router.project-osrm.org/route/v1',
-            profile: 'driving' // 'driving', 'walking', 'cycling'
-        })
+            profile: 'driving', // 'driving', 'walking', 'cycling'
+        }),
     }).addTo(mymap);
 
     // listen for route to be calculated
@@ -100,33 +102,50 @@ function calculateRoute(){
         console.log('Route found: ', routes[0]);
         console.log('Distance: ' + (summary.totalDistance / 1000).toFixed(2) + ' km');
         console.log('Time: ' + (summary.totalTime / 60).toFixed(2) + ' mins');
+
+        // 更新面板
+        document.getElementById('routeInfo').innerHTML = `
+            <strong>Route Calculated!</strong><br>
+            📏 Distance: ${(summary.totalDistance / 1000).toFixed(2)} km<br>
+            ⏱️ Time: ${(summary.totalTime / 60).toFixed(0)} min<br>
+            📍 Waypoints: ${waypoints.length}<br>
+            <button class="btn btn-sm btn-danger mt-2 w-100" onclick="clearRoute()">Clear Route</button>
+        `;
         
-        alert(
-            `Route calculated!\n` +
-            `Distance: ${(summary.totalDistance / 1000).toFixed(2)} km\n` +
-            `Time: ${(summary.totalTime / 60).toFixed(2)} mins\n` +
-            `Waypoints: ${waypoints.length}`
-        );
+        // alert(
+        //     `Route calculated!\n` +
+        //     `Distance: ${(summary.totalDistance / 1000).toFixed(2)} km\n` +
+        //     `Time: ${(summary.totalTime / 60).toFixed(2)} mins\n` +
+        //     `Waypoints: ${waypoints.length}`
+        // );
 
     });
 
     routingControl.on('routingerror', function(e) {
-        console.error('Routing error: ', e);
-        alert('Error calculating route. Please try again.');
+        document.getElementById('routeInfo').innerHTML = `
+            <span class="text-danger">❌ Route calculation failed</span>
+        `;
     });
+
+    // routingControl.on('routingerror', function(e) {
+    //     console.error('Routing error: ', e);
+    //     alert('Error calculating route. Please try again.');
+    // });
 
 }
 
 // clear route
 function clearRoute(){
     routeDestination = null;
-    routeDestination = [];
+    routeWaypoints = [];
 
     if(routingControl){
         mymap.removeControl(routingControl);
         routingControl = null;
     }
+    
+    document.getElementById('routeInfo').innerHTML = `Click on assets to plan your route`;
 
     setMarkerColours(featureGroup);
-    alert('Route cleared.');
+    // alert('Route cleared.');
 }

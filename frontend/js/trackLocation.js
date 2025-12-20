@@ -59,8 +59,8 @@ function showPosition(position){
 	mymap = mymap.setView([position.coords.latitude, position.coords.longitude],13);
 
 	// log to check items in trackLocation Layer and featureGroup
-	//console.log(trackLocationLayer)
-	//console.log(featureGroup)
+	console.log(trackLocationLayer)
+	console.log(featureGroup)
 	
 	// call closestFormPoint to show the popup for the closest point
 	const closestPoint = getClosestPoint(5);
@@ -92,8 +92,6 @@ function removeTracks(){
 
 }
 
-
-
 // =============================================
 // function to get the closest Point within a set distance.
 function getClosestPoint(proximityDistance) {
@@ -116,7 +114,7 @@ function getClosestPoint(proximityDistance) {
 	featureGroup.eachLayer(function(layer) {
 		
 	  // calculate the distances between each feature in featureGroup and the latest user position
-	  const distanceToUser = calculateDistance(userLat, userLng,layer.getLatLng().lat, layer.getLatLng().lng, 'K')
+	  const distanceToUser = calculateDistance(userLat, userLng, layer.getLatLng().lat, layer.getLatLng().lng, 'K')
 
 	  // check if the distance is within the given range and closer than any previously found point;
 	  // iterate to get the closest feature with the closest feature.
